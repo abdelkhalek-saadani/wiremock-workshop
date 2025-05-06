@@ -5,6 +5,8 @@ import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.matching.MatchResult;
 import com.github.tomakehurst.wiremock.matching.RequestMatcherExtension;
 
+import java.util.List;
+
 public class RejectedHttpVerbsMatcher extends RequestMatcherExtension {
 
     @Override
@@ -24,7 +26,14 @@ public class RejectedHttpVerbsMatcher extends RequestMatcherExtension {
          *   HTTP method used in the incoming request
          *   You can retrieve this using request.getMethod().value()
          */
-
-        return null;
+        List<?> rejectedVerbs = parameters.getList("rejectedVerbs");
+//        if (rejectedVerbs.contains(request.getMethod().value())) {
+//            return MatchResult.exactMatch();
+//        }
+//        else {
+//            return MatchResult.noMatch();
+//        }
+        boolean isMatch = rejectedVerbs.contains(request.getMethod().value());
+        return MatchResult.of(isMatch);
     }
 }

@@ -3,6 +3,7 @@ package exercises.extensions;
 import com.github.tomakehurst.wiremock.extension.requestfilter.RequestFilterAction;
 import com.github.tomakehurst.wiremock.extension.requestfilter.StubRequestFilterV2;
 import com.github.tomakehurst.wiremock.http.Request;
+import com.github.tomakehurst.wiremock.http.ResponseDefinition;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 
 public class BasicAuthRequestFilter implements StubRequestFilterV2 {
@@ -21,8 +22,16 @@ public class BasicAuthRequestFilter implements StubRequestFilterV2 {
 
     @Override
     public RequestFilterAction filter(Request request, ServeEvent serveEvent) {
+        if (
+                request.header("Authorization") == null
+                        || !request.header("Authorization").firstValue().equals("Basic dXNlcm5hbWU6cGFzc3dvcmQ=")
+        ) {
+            return RequestFilterAction.stopWith(ResponseDefinition.notAuthorised());
+        }
+        else {
+            return RequestFilterAction.continueWith(request);
+        }
 
-        return null;
     }
 
     @Override
