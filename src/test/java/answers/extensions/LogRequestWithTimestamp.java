@@ -30,4 +30,7 @@ public class LogRequestWithTimestamp implements ServeEventListener {
                 new SimpleDateFormat(format).format(new Date())
         );
     }
+
+    @Override
+    public boolean applyGlobally() { return false;}
 }

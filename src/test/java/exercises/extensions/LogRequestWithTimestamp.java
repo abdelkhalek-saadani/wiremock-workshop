@@ -23,5 +23,15 @@ public class LogRequestWithTimestamp implements ServeEventListener {
          * '<timestamp>: Loan application request received'
          */
 
+
+        System.out.printf(
+                "%s: Loan application request received",
+                new SimpleDateFormat(parameters.getString("format")).format(new Date())
+        );
+    }
+
+    @Override
+    public boolean applyGlobally() {
+        return false;
     }
 }
