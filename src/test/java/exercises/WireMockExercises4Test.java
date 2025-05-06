@@ -47,6 +47,15 @@ public class WireMockExercises4Test {
          * already active, so you don't need to do that yourself.
          ************************************************/
 
+        wiremock.stubFor(
+                get(urlEqualTo("/echo-port"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withBody("Listening on port {{request.port}}")
+                        )
+        );
+
     }
 
     public void setupStubExercise402() {
@@ -59,6 +68,19 @@ public class WireMockExercises4Test {
          * where <amount> is the value of the JSON element
          * loanDetails.amount extracted from the request body
          ************************************************/
+
+        wiremock.stubFor(
+                post(urlEqualTo("/echo-loan-amount"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withBody(
+                                                "Received loan application request for " +
+                                                        "${{jsonPath request.body '$.loanDetails.amount'}}"
+                                        )
+                        )
+        );
+
 
     }
 

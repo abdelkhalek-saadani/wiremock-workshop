@@ -36,6 +36,21 @@ public class WireMockExercises3Test {
          *      returns HTTP 200 and body 'Loan ID: 12345'
          ************************************************/
 
+        stubFor(get(urlEqualTo("/loan/12345")).inScenario("Loan processing")
+                .whenScenarioStateIs(Scenario.STARTED)
+                .willReturn(aResponse().withStatus(404)));
+
+        stubFor(
+                post(urlEqualTo("/requestLoan")).inScenario("Loan processing")
+                        .withRequestBody(equalTo("Loan ID: 12345"))
+                .whenScenarioStateIs(Scenario.STARTED)
+                .willReturn(aResponse().withStatus(201))
+                        .willSetStateTo("LOAN_GRANTED"));
+
+
+        stubFor(get(urlEqualTo("/loan/12345")).inScenario("Loan processing")
+                .whenScenarioStateIs("LOAN_GRANTED")
+                .willReturn(aResponse().withStatus(200).withBody("Loan ID: 12345")));
     }
 
     @Test
