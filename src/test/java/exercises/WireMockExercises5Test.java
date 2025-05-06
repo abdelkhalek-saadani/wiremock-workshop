@@ -54,6 +54,7 @@ public class WireMockExercises5Test {
          * Add a verification to this test that verifies that exactly one HTTP POST
          * has been submitted to the /requestLoan endpoint
          */
+        verify(exactly(1), postRequestedFor(urlEqualTo("/requestLoan")));
 
     }
 
@@ -90,6 +91,14 @@ public class WireMockExercises5Test {
          *   loanAmount variable supplied to the test
          *   (hint: see setupStubExercise205() in WireMockAnswers2Test.java)
          */
+
+        verify(exactly(1),
+                postRequestedFor(urlEqualTo("/requestLoan"))
+                        .withHeader("Content-Type", containing("application/json"))
+                        .withRequestBody(
+                                matchingJsonPath("$.loanDetails.amount", equalTo(String.valueOf(loanAmount)))
+                        )
+        );
 
     }
 }
